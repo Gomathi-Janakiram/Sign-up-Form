@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up Form</title>
+    <link href="./styles.css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="body">
+        <div class="left-image">
+            <div class="image-title">
+                <img src="./images/odin-lined.png" class="logo"/>
+                SIGN-UP FORM
+            </div>
+            <img src="./images/flower-bg.jpg" class="img"/>
+        </div>
+        <div>
+            <header class="form-content">
+                <h3>Join our flower casket community and be the first to receive updates on our exquisite floral collections, exclusive discounts, and special offers, ensuring you never miss out on bringing the beauty of nature into your home!</h3>
+                <h3>Sign up to bloom with us and receive the freshest updates!</h3>
+            </header>
+
+            <form>
+                <div class="form">
+                    <div>
+                        <label for="firstName">FIRST NAME</label><br/>
+                        <input type="text" id="firstName">
+                    </div>
+                       
+                    <div>
+                        <label for="lastName">LAST NAME</label><br/>
+                        <input type="text" id="lastName">
+                    </div>
+    
+                    <div>
+                        <label for="email">EMAIL</label><br/>
+                        <input type="email" id="email">
+                    </div>
+    
+                    <div>
+                        <label for="phNo">PHONE NUMBER</label><br/>
+                        <input name="phone" type="tel" id="phNo" pattern="^[0-9]{10}">
+                    </div>
+    
+                    <div>
+                        <label for="password">PASSWORD</label><br/>
+                        <input name="password" type="password" id="password">
+                    </div>
+    
+                    <div>
+                        <label for="confirmPassword">CONFIRM PASSWORD</label><br/>
+                        <input name="confirmPassword" type="password" id="confirmPassword">
+                    </div>
+                </div>
+
+                <footer>
+                    <button id="button" type="submit">Create Account</button>
+                    <p>Already have an account? <a class="loginIn">Log in</a></p>
+                </footer>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const submitButton = document.getElementById("button");
+        const inputs = document.getElementsByTagName("input");
+        
+        submitButton.addEventListener("click", (e) => {
+            e.preventDefault()
+            Array.from(inputs).forEach((input) => {
+                input.setAttribute("required", "true");
+            })
+
+            Array.from(inputs).forEach((input) => {
+                if (!input.checkValidity()) {
+                    if (!input.nextElementSibling || input.nextElementSibling?.tagName !== 'P') {
+                        const pTag = document.createElement('p');
+                        pTag.className = 'requiredMsg'
+                        pTag.textContent = 'This field is required';
+                        input.parentNode.insertBefore(pTag, input.nextSibling)
+                    }
+                } else {
+                    if (input.nextElementSibling || input.nextElementSibling?.tagName == 'P') {
+                        input.nextElementSibling.remove()
+                    }
+                }
+            })
+        })
+
+        Array.from(inputs).forEach((input) => {
+            input.addEventListener("input", () => {
+                if (input.nextElementSibling || input.nextElementSibling?.tagName == 'P') {
+                    input.nextElementSibling.remove()
+                }
+
+                const pTag = document.createElement('p');
+                pTag.className = 'requiredMsg'
+
+                if (!input.validity.valid) {
+                    if (input.validity.valueMissing) {
+                        pTag.textContent = 'This field is required';
+                    } else if (input.validity.typeMismatch) {
+                        pTag.textContent = 'Please enter a valid email address';
+                    } else if (input.validity.patternMismatch) {
+                        if (input.name =='phone') {
+                            pTag.textContent = 'Please enter in a 10 digit phone number'
+                        }
+                    } else {
+                        pTag.textContent = 'Invalid input';
+                    }
+                    input.parentNode.insertBefore(pTag, input.nextSibling)
+                }
+
+                if (input.name == 'confirmPassword') {
+                    const password = document.getElementById('password');
+                    if (password.value !== input.value) {
+                        pTag.textContent = 'Passwords do not match'
+                    }
+                    input.parentNode.insertBefore(pTag, input.nextSibling)
+                } 
+            })
+        })
+    </script>
+</body>
+</html>
